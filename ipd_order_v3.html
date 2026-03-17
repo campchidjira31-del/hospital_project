@@ -8,6 +8,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
 
+        @font-face {
+            font-family: 'ThaiSarabunPSK';
+            src: local('TH Sarabun PSK'), local('TH SarabunPSK'), local('THSarabunPSK');
+        }
+
         :root {
             --bg: #f5f4f0;
             --sf: #fff;
@@ -40,7 +45,7 @@
         }
 
         body {
-            font-family: 'Sarabun', sans-serif;
+            font-family: 'ThaiSarabunPSK', 'TH Sarabun PSK', 'Sarabun', sans-serif;
             background: var(--bg);
             color: var(--tx);
             font-size: 14px
@@ -107,13 +112,76 @@
         .main {
             display: grid;
             grid-template-columns: 240px 1fr;
-            height: calc(100vh - 39px)
+            height: calc(100vh - 39px);
+            transition: grid-template-columns .2s ease
+        }
+
+        .main.side-hidden {
+            grid-template-columns: 0px 1fr
         }
 
         .side {
             background: var(--sf);
             border-right: 1px solid var(--bd);
-            overflow-y: auto
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: opacity .2s ease
+        }
+
+        .main.side-hidden .side {
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .side-toggle {
+            background: var(--sf);
+            border: 1px solid var(--bd);
+            cursor: pointer;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all .12s;
+            color: var(--t2);
+            flex-shrink: 0
+        }
+
+        .side-toggle:hover {
+            background: var(--bg);
+            color: var(--gr)
+        }
+
+        .side-expand {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            background: var(--sf);
+            border: 1px solid var(--bd);
+            border-left: none;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            padding: 12px 4px;
+            font-size: 14px;
+            color: var(--t2);
+            box-shadow: 2px 0 6px rgba(0, 0, 0, .1);
+            display: none;
+            writing-mode: vertical-lr;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 11px;
+            letter-spacing: 1px
+        }
+
+        .side-expand:hover {
+            background: var(--gl);
+            color: var(--gr)
+        }
+
+        .main.side-hidden~.side-expand {
+            display: block
         }
 
         .ss {
@@ -624,7 +692,7 @@
             background: #fff;
             position: relative;
             overflow: hidden;
-            font-family: 'Sarabun', sans-serif;
+            font-family: 'ThaiSarabunPSK', 'TH Sarabun PSK', 'Sarabun', sans-serif;
             box-shadow: 0 2px 10px rgba(0, 0, 0, .2)
         }
 
@@ -646,7 +714,7 @@
             font-weight: 600;
             margin-top: 3px;
             font-size: 9px;
-            text-decoration: underline
+            text-decoration: none
         }
 
         .go {
@@ -746,6 +814,10 @@
     </div>
     <div class="main">
         <div class="side">
+            <div class="ss" style="display:flex;align-items:center;justify-content:space-between">
+                <h3 style="margin:0">Patient & Templates</h3>
+                <button class="side-toggle" onclick="toggleSide()" id="sideBtn" title="ซ่อน sidebar">◀</button>
+            </div>
             <div class="ss">
                 <h3>ข้อมูลผู้ป่วย</h3>
                 <div class="pg">
@@ -787,6 +859,7 @@
             </div>
         </div>
     </div>
+    <button class="side-expand" id="sideExpand" onclick="toggleSide()" title="แสดง sidebar">▶ SIDEBAR</button>
     <div class="ov" id="ov">
         <div class="pbox">
             <div class="pbar"><span>Preview</span>
@@ -806,6 +879,7 @@
                 <label>|TopY:<input type=number id="ty" value=32 step=1 onchange="rPv()">mm</label>
                 <label>Font:<input type=number id="fs" value=10 step=.5 onchange="rPv()">px</label>
                 <label>Guide:<input type=checkbox id="gd" checked onchange="rPv()"></label>
+                <label>All Text:<input type=number id="atf" value=100 step=5 min=50 max=200 onchange="rPv()">%</label>
             </div>
             <div class="pbody" id="pb"></div>
         </div>
@@ -996,13 +1070,154 @@
             { n: "Oxytocin 10IU inj", d: "10-20 IU in NSS 1000ml IV drip", g: "ob" },
         ];
 
+        // ============ DISEASE DATABASE ============
+        const DX = [
+            // Chronic / Common
+            { n: "T2DM", f: "Type 2 diabetes mellitus" },
+            { n: "T1DM", f: "Type 1 diabetes mellitus" },
+            { n: "DM uncontrolled", f: "Diabetes mellitus uncontrolled" },
+            { n: "HT", f: "Hypertension" },
+            { n: "HT urgency", f: "Hypertensive urgency" },
+            { n: "HT emergency", f: "Hypertensive emergency" },
+            { n: "DLP", f: "Dyslipidemia" },
+            { n: "CKD stage ", f: "Chronic kidney disease" },
+            { n: "ESRD on HD", f: "End-stage renal disease on hemodialysis" },
+            { n: "Obesity", f: "Obesity" },
+            { n: "Gout", f: "Gout" },
+            { n: "Gout attack", f: "Acute gouty arthritis" },
+            // Cardiovascular
+            { n: "STEMI", f: "Acute ST-elevation myocardial infarction" },
+            { n: "NSTEMI", f: "Acute non-ST-elevation myocardial infarction" },
+            { n: "Unstable angina", f: "Unstable angina" },
+            { n: "CHF", f: "Congestive heart failure" },
+            { n: "ADHF", f: "Acute exacerbation of congestive heart failure" },
+            { n: "AF", f: "Atrial fibrillation" },
+            { n: "AF with RVR", f: "Atrial fibrillation with rapid ventricular response" },
+            { n: "SVT", f: "Supraventricular tachycardia" },
+            { n: "VT", f: "Ventricular tachycardia" },
+            { n: "DVT", f: "Deep vein thrombosis" },
+            { n: "Pulmonary embolism", f: "Pulmonary embolism" },
+            { n: "Valvular heart disease", f: "Valvular heart disease" },
+            // Neuro
+            { n: "Old CVA", f: "Old cerebrovascular accident" },
+            { n: "Acute ischemic stroke", f: "Acute ischemic stroke" },
+            { n: "Hemorrhagic stroke", f: "Hemorrhagic stroke (ICH)" },
+            { n: "TIA", f: "Transient ischemic attack" },
+            { n: "Seizure", f: "Seizure disorder" },
+            { n: "Epilepsy", f: "Epilepsy" },
+            { n: "Status epilepticus", f: "Status epilepticus" },
+            { n: "Meningitis", f: "Meningitis" },
+            { n: "Encephalitis", f: "Encephalitis" },
+            { n: "Parkinson disease", f: "Parkinson disease" },
+            { n: "Dementia", f: "Dementia" },
+            // Respiratory
+            { n: "CAP/Community-acquired pneumonia", f: "Community-acquired pneumonia" },
+            { n: "HAP", f: "Hospital-acquired pneumonia" },
+            { n: "Aspiration pneumonia", f: "Aspiration pneumonia" },
+            { n: "COPD exacerbation", f: "Acute exacerbation of COPD" },
+            { n: "COPD", f: "Chronic obstructive pulmonary disease" },
+            { n: "Asthma exacerbation", f: "Acute asthma exacerbation" },
+            { n: "Asthma", f: "Bronchial asthma" },
+            { n: "Pleural effusion", f: "Pleural effusion" },
+            { n: "Pneumothorax", f: "Pneumothorax" },
+            { n: "TB", f: "Pulmonary tuberculosis" },
+            { n: "Hemoptysis", f: "Hemoptysis" },
+            { n: "Respiratory failure", f: "Acute respiratory failure" },
+            // GI
+            { n: "UGIB", f: "Upper gastrointestinal bleeding" },
+            { n: "LGIB", f: "Lower gastrointestinal bleeding" },
+            { n: "PUD", f: "Peptic ulcer disease" },
+            { n: "Acute gastroenteritis", f: "Acute gastroenteritis" },
+            { n: "AGE with dehydration", f: "Acute gastroenteritis with dehydration" },
+            { n: "Acute pancreatitis", f: "Acute pancreatitis" },
+            { n: "Cholecystitis", f: "Acute cholecystitis" },
+            { n: "Cholangitis", f: "Acute cholangitis" },
+            { n: "Bowel obstruction", f: "Bowel obstruction" },
+            { n: "Appendicitis", f: "Acute appendicitis" },
+            { n: "Cirrhosis", f: "Cirrhosis of liver" },
+            { n: "Alcoholic hepatitis", f: "Alcoholic hepatitis" },
+            { n: "Hepatic encephalopathy", f: "Hepatic encephalopathy" },
+            { n: "Liver abscess", f: "Liver abscess" },
+            // Renal / Electrolyte
+            { n: "AKI", f: "Acute kidney injury" },
+            { n: "Hyponatremia", f: "Hyponatremia" },
+            { n: "Hypernatremia", f: "Hypernatremia" },
+            { n: "Hypokalemia", f: "Hypokalemia" },
+            { n: "Hyperkalemia", f: "Hyperkalemia" },
+            { n: "Metabolic acidosis", f: "Metabolic acidosis" },
+            { n: "UTI", f: "Urinary tract infection" },
+            { n: "Pyelonephritis", f: "Acute pyelonephritis" },
+            { n: "Urolithiasis", f: "Urolithiasis" },
+            // Endocrine
+            { n: "DKA", f: "Diabetic ketoacidosis" },
+            { n: "HHS", f: "Hyperosmolar hyperglycemic state" },
+            { n: "Hypoglycemia", f: "Hypoglycemia" },
+            { n: "Thyroid storm", f: "Thyroid storm" },
+            { n: "Hyperthyroidism", f: "Hyperthyroidism" },
+            { n: "Hypothyroidism", f: "Hypothyroidism" },
+            { n: "Adrenal insufficiency", f: "Adrenal insufficiency" },
+            // Infectious
+            { n: "Sepsis", f: "Sepsis" },
+            { n: "Septic shock", f: "Septic shock" },
+            { n: "Cellulitis", f: "Cellulitis" },
+            { n: "Necrotizing fasciitis", f: "Necrotizing fasciitis" },
+            { n: "Dengue fever", f: "Dengue fever" },
+            { n: "DHF", f: "Dengue hemorrhagic fever" },
+            { n: "Scrub typhus", f: "Scrub typhus" },
+            { n: "Leptospirosis", f: "Leptospirosis" },
+            { n: "Malaria", f: "Malaria" },
+            { n: "HIV infection", f: "HIV infection" },
+            { n: "COVID-19", f: "COVID-19 infection" },
+            // Hematology
+            { n: "Anemia", f: "Anemia" },
+            { n: "IDA", f: "Iron deficiency anemia" },
+            { n: "Thalassemia", f: "Thalassemia" },
+            { n: "DIC", f: "Disseminated intravascular coagulation" },
+            { n: "Thrombocytopenia", f: "Thrombocytopenia" },
+            // General / Functional
+            { n: "Bed ridden", f: "Bed ridden status" },
+            { n: "AFI", f: "Acute febrile illness" },
+            { n: "Syncope", f: "Syncope" },
+            { n: "Presyncope", f: "Presyncope" },
+            { n: "Anaphylaxis", f: "Anaphylaxis" },
+            { n: "Drug allergy", f: "Drug allergy" },
+            { n: "Alcohol dependence", f: "Alcohol dependence" },
+            { n: "Alcohol withdrawal", f: "Alcohol withdrawal" },
+            // Poisoning
+            { n: "Organophosphate poisoning", f: "Organophosphate poisoning" },
+            { n: "Paracetamol overdose", f: "Paracetamol overdose" },
+            { n: "Drug overdose", f: "Drug overdose" },
+            { n: "Snake bite", f: "Snake envenomation" },
+            // Musculoskeletal
+            { n: "Fracture ___", f: "Fracture" },
+            { n: "Septic arthritis", f: "Septic arthritis" },
+            { n: "Osteomyelitis", f: "Osteomyelitis" },
+            { n: "Low back pain", f: "Low back pain" },
+            // OB-GYN
+            { n: "Preeclampsia", f: "Preeclampsia" },
+            { n: "Eclampsia", f: "Eclampsia" },
+            { n: "PPH", f: "Postpartum hemorrhage" },
+            { n: "Ectopic pregnancy", f: "Ectopic pregnancy" },
+            { n: "Threatened abortion", f: "Threatened abortion" },
+            // Surgical
+            { n: "Pre-op ___", f: "Pre-operative" },
+            { n: "Post-op ___", f: "Post-operative" },
+            { n: "Wound infection", f: "Surgical site infection" },
+            // Psychiatric
+            { n: "MDD", f: "Major depressive disorder" },
+            { n: "Suicide attempt", f: "Suicide attempt" },
+            { n: "Acute psychosis", f: "Acute psychosis" },
+            { n: "Delirium", f: "Delirium" },
+        ];
+        const DX_QUICK = ["DM HT DLP", "Old CVA", "CKD stage ", "Bed ridden", "AFI", "Pneumonia", "COPD AE", "Anemia", "AKI", "Bronchiolitis", "UTI", "Cellulitis", "Heart failure", "ESRD with volume overload"];
+
         // ============ TEMPLATES ============
         // Right column order: Diet → Monitoring → Standing Med
         const T = {
             alc_hep: {
                 name: "Alcoholic Hepatitis/Cirrhosis", desc: "ตับอักเสบจากแอลกอฮอล์",
                 dx: "1. Alcoholic hepatitis\n2. Cirrhosis\n3. Alcohol dependence",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
                     { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte, LFT", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "Hepatitis B & C screening", c: 0 }, { x: "Blood sugar", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "LFT", "Coag", "HBsAg/AntiHCV"] },
                     { t: "Investigation", color: "lab", items: [{ x: "CXR PA upright", c: 1 }, { x: "US whole abdomen", c: 1 }], quick: ["CXR", "US abdomen", "CT abdomen", "EGD"] },
@@ -1019,7 +1234,7 @@
             pneumonia: {
                 name: "CAP/Pneumonia", desc: "ปอดอักเสบ",
                 dx: "1. Community-acquired pneumonia\n2. Sepsis",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
                     { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte", c: 1 }, { x: "Blood culture x 2", c: 1 }, { x: "Sputum G/S & C/S", c: 1 }, { x: "Blood sugar", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "Blood C/S x2", "Sputum C/S", "Procalcitonin"] },
                     { t: "Investigation", color: "lab", items: [{ x: "CXR PA upright", c: 1 }], quick: ["CXR", "CT chest"] },
@@ -1036,7 +1251,7 @@
             dka: {
                 name: "DKA", desc: "Diabetic ketoacidosis",
                 dx: "1. DKA\n2. T2DM uncontrolled",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
                     { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte", c: 1 }, { x: "Blood sugar STAT", c: 1 }, { x: "VBG/ABG", c: 1 }, { x: "Urine ketone", c: 1 }, { x: "HbA1C", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "ABG", "Urine ketone", "HbA1C"] },
                     { t: "IV Fluid (DKA)", color: "iv", items: [{ x: "0.9%NSS 1000ml IV in 1 hr", c: 1 }, { x: "then 0.9%NSS 1000ml IV in 2 hr", c: 1 }, { x: "then 0.9%NSS 500ml + KCl 20mEq in 2 hr", c: 1 }, { x: "เมื่อ BS<250: 5%DNS 1000ml IV", c: 1 }], quick: ["0.9%NSS 1000ml", "5%DNS 1000ml", "KCl 20mEq"] },
@@ -1051,7 +1266,7 @@
             acs: {
                 name: "ACS/STEMI", desc: "Acute coronary syndrome",
                 dx: "1. ACS (STEMI/NSTEMI/UA)\n2. HT\n3. DLP",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
                     { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte, FBS", c: 1 }, { x: "Troponin STAT + repeat 3-6hr", c: 1 }, { x: "Lipid profile", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "12-lead ECG STAT", c: 1 }, { x: "CXR portable", c: 1 }], quick: ["CBC", "Troponin", "Lipid", "Coag", "ECG", "CXR"] },
                     { t: "Medication STAT", color: "med", items: [{ x: "ASA 325 mg chew STAT", c: 1 }, { x: "Clopidogrel 300 mg loading", c: 1 }, { x: "Atorvastatin 80 mg STAT", c: 1 }, { x: "NTG 0.4 mg SL prn", c: 1 }, { x: "Enoxaparin 1 mg/kg SC q 12 hr", c: 1 }, { x: "Morphine 2-4 mg IV prn", c: 0 }], quick: ["ASA 325mg", "Clopi 300mg", "Atorva 80mg", "NTG SL", "Enoxaparin"] },
@@ -1066,7 +1281,7 @@
             ugib: {
                 name: "UGIB", desc: "Upper GI bleeding",
                 dx: "1. Upper GI bleeding\n2. PUD/Variceal",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
                     { t: "Lab", color: "lab", items: [{ x: "CBC STAT + repeat q 6-8 hr", c: 1 }, { x: "BUN, Cr, Electrolyte", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "Blood group + XM 2u PRC", c: 1 }, { x: "LFT", c: 0 }], quick: ["CBC", "BUN/Cr/Elyte", "Coag", "XM 2u PRC", "LFT"] },
                     { t: "IV Fluid & Blood", color: "iv", items: [{ x: "0.9%NSS 1000ml IV FAST", c: 1 }, { x: "PRC transfusion ถ้า Hb<7", c: 1 }], quick: ["0.9%NSS 1000ml FAST", "PRC 1 unit", "FFP"] },
@@ -1080,21 +1295,29 @@
             },
             blank: {
                 name: "Blank", desc: "เริ่มจากว่าง", dx: "",
-                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                left: [{ t: "Problem List", color: "problem", items: [], quick: DX_QUICK }],
                 mid: [
-                    { t: "Lab", color: "lab", items: [], quick: ["CBC", "BUN/Cr/Elyte", "LFT", "Coag", "FBS", "UA", "HbA1C", "Lipid"] },
-                    { t: "Investigation", color: "lab", items: [], quick: ["CXR", "US abdomen", "CT brain", "ECG", "Echo"] },
+                    { t: "Lab", color: "lab", items: [], quick: ["CBC, BUN, Cr, Elyte", "CBC", "BUN/Cr", "Elyte", "LFT", "Coag", "FBS", "UA", "HbA1C", "Lipid", "H/Cx2", "G/M PRC 1 unit IV in 4 hr"] },
+                    { t: "Investigation", color: "lab", items: [], quick: ["CXR", "US bedside", "EKG", "Film AAS"] },
                     { t: "IV Fluid", color: "iv", items: [], quick: ["0.9%NSS 1000ml IV rate 80 ml/hr", "5%D/N/2 1000ml IV rate 80 ml/hr", "R-cetate 1000ml IV rate 80 ml/hr", "Hep lock"] },
-                    { t: "One-day Medication", color: "med", items: [], quick: ["Paracetamol 500mg prn", "Omeprazole 40mg IV", "Plasil 10mg IV prn", "Tramadol 50mg IV prn"] },
-                    { t: "Other", color: "general", items: [], quick: ["O2 cannula ___ L/min keep SpO2>94%", "O2 mask with bag ___ L/min", "Foley cath", "NG tube", "On ventilator", "Suction prn"] }
+                    { t: "One-day Medication", color: "med", items: [], quick: ["Tramadol 50 mg IV prn q 8 hr", "Dexa 4 mg IV q 6 hr", "Plasil 10mg IV prn q 8hr", "Bero[2:2] 1 nb q 4 hr"] },
+                    { t: "Other", color: "general", items: [], quick: ["O2 cannula 3 L/min", "keep SpO2>94%", "O2 mask with bag 10 L/min", "Foley cath", "NG tube", "Hct q 8 hr, if มากกว่า/น้อยกว่า 3% notify", "Monitor EKG"] }
                 ],
                 right: [
-                    { t: "Diet & Activity", color: "diet", items: [], quick: ["Regular diet", "Soft diet", "NPO", "Bed rest", "Ambulate"] },
-                    { t: "Monitoring", color: "monitor", items: [], quick: ["V/S q 4hr", "V/S q 2hr", "I/O record", "Strict I/O", "DTX q 6hr", "Neuro check"] },
+                    { t: "Diet & Activity", color: "diet", items: [], quick: ["Regular diet", "Soft diet", "DM diet", "Low salt diet", "NPO", "Bed rest", "Ambulate"] },
+                    { t: "Monitoring", color: "monitor", items: [], quick: ["Record V/S q 4hr", "V/S q 2hr", "I/O record", "Strict I/O", "DTX premeal, hs keep 80-200, on RI scale", "Neuro check"] },
                     { t: "Standing Medication", color: "med", items: [], quick: [] }
                 ]
             }
         };
+
+        function toggleSide() {
+            const m = document.querySelector('.main');
+            m.classList.toggle('side-hidden');
+            const hidden = m.classList.contains('side-hidden');
+            document.getElementById('sideBtn').textContent = hidden ? '▶' : '◀';
+            document.getElementById('sideExpand').style.display = hidden ? 'block' : 'none';
+        }
 
         let O = { left: [], mid: [], right: [] }, sv = {};
         function init() { try { sv = JSON.parse(localStorage.getItem('ipd3s') || '{}') } catch (e) { } rTL(); ldT('blank') }
@@ -1104,6 +1327,7 @@
         function rA() { rC('cL', O.left, 'left'); rC('cM', O.mid, 'mid'); rC('cR', O.right, 'right') }
         function rC(id, secs, ck) {
             const col = document.getElementById(id); const h = col.querySelector('.ch'); col.innerHTML = ''; col.appendChild(h);
+            if (ck === 'mid') { const ab = document.createElement('div'); ab.style.cssText = 'font-weight:700;font-size:13px;text-align:center;padding:4px 0'; ab.textContent = 'Admit'; col.appendChild(ab); }
             secs.forEach((s, si) => {
                 const c = document.createElement('div'); c.className = 'oc cc-' + s.color;
                 const isProblem = (s.color === 'problem');
@@ -1135,7 +1359,8 @@
                     const nVal = s.notes || '';
                     notesHtml = '<textarea class="prob-notes" placeholder="รายละเอียดเพิ่มเติม / Progress note..." onblur="ubNotes(\'' + ck + '\',' + si + ',this)">' + nVal + '</textarea>';
                 }
-                c.innerHTML = '<div class="oh" onclick="this.parentElement.classList.toggle(\'cl\')"><span>' + s.t + '</span><span class="ar">▼</span></div><div class="ob"><div class="ois">' + ih + '</div><div class="ar-row"><input class="ar-in" placeholder="+ พิมพ์ชื่อยาหรือรายการ..." oninput="acS(this,\'' + ck + '\',' + si + ')" onkeydown="acK(event,this,\'' + ck + '\',' + si + ')" onfocus="acS(this,\'' + ck + '\',' + si + ')" onblur="setTimeout(function(){acH(event.target)},200)"><button class="b bs" onclick="aI(\'' + ck + '\',' + si + ',this.previousElementSibling)">+</button><div class="ac-drop"></div></div>' + qh + notesHtml + '</div>';
+                var phText = isProblem ? '+ พิมพ์ชื่อโรค / diagnosis...' : '+ พิมพ์ชื่อยาหรือรายการ...';
+                c.innerHTML = '<div class="oh" onclick="this.parentElement.classList.toggle(\'cl\')"><span>' + s.t + '</span><span class="ar">▼</span></div><div class="ob"><div class="ois">' + ih + '</div><div class="ar-row"><input class="ar-in" placeholder="' + phText + '" oninput="acS(this,\'' + ck + '\',' + si + ')" onkeydown="acK(event,this,\'' + ck + '\',' + si + ')" onfocus="acS(this,\'' + ck + '\',' + si + ')" onblur="setTimeout(function(){acH(event.target)},200)"><button class="b bs" onclick="aI(\'' + ck + '\',' + si + ',this.previousElementSibling)">+</button><div class="ac-drop"></div></div>' + qh + notesHtml + '</div>';
                 col.appendChild(c);
             });
         }
@@ -1163,7 +1388,22 @@
 
         // ============ AUTOCOMPLETE with arrow keys ============
         var acIdx = -1;
-        function acS(inp, ck, si) { acIdx = -1; const v = inp.value.trim().toLowerCase(); const dd = inp.parentElement.querySelector('.ac-drop'); if (v.length < 2) { dd.classList.remove('show'); dd.innerHTML = ''; return } const matches = DR.filter(function (d) { return d.n.toLowerCase().includes(v) }).slice(0, 15); if (!matches.length) { dd.classList.remove('show'); dd.innerHTML = ''; return } dd.innerHTML = matches.map(function (d, i) { return '<div class="ac-item" onmousedown="acPk(this,\'' + ck + '\',' + si + ')" data-full="' + d.n + ' ' + d.d + '"><span class="ac-name">' + d.n + '</span><span class="ac-dose">' + d.d + '</span></div>'; }).join(''); dd.classList.add('show') }
+        function isProbSec(ck, si) { return O[ck][si] && O[ck][si].color === 'problem' }
+        function acS(inp, ck, si) {
+            acIdx = -1; const v = inp.value.trim().toLowerCase(); const dd = inp.parentElement.querySelector('.ac-drop');
+            if (v.length < 1) { dd.classList.remove('show'); dd.innerHTML = ''; return }
+            if (isProbSec(ck, si)) {
+                const matches = DX.filter(function (d) { return d.n.toLowerCase().includes(v) || d.f.toLowerCase().includes(v) }).slice(0, 15);
+                if (!matches.length) { dd.classList.remove('show'); dd.innerHTML = ''; return }
+                dd.innerHTML = matches.map(function (d) { return '<div class="ac-item" onmousedown="acPk(this,\'' + ck + '\',' + si + ')" data-full="' + d.n + '"><span class="ac-name">' + d.n + '</span><span class="ac-dose">' + d.f + '</span></div>'; }).join('');
+                dd.classList.add('show'); return;
+            }
+            if (v.length < 2) { dd.classList.remove('show'); dd.innerHTML = ''; return }
+            const matches = DR.filter(function (d) { return d.n.toLowerCase().includes(v) }).slice(0, 15);
+            if (!matches.length) { dd.classList.remove('show'); dd.innerHTML = ''; return }
+            dd.innerHTML = matches.map(function (d, i) { return '<div class="ac-item" onmousedown="acPk(this,\'' + ck + '\',' + si + ')" data-full="' + d.n + ' ' + d.d + '"><span class="ac-name">' + d.n + '</span><span class="ac-dose">' + d.d + '</span></div>'; }).join('');
+            dd.classList.add('show');
+        }
         function acK(e, inp, ck, si) {
             var dd = inp.parentElement.querySelector('.ac-drop');
             var items = dd.querySelectorAll('.ac-item');
@@ -1213,43 +1453,44 @@
             const now = new Date();
             const ds = now.getDate() + '/' + (now.getMonth() + 1) + '/' + (now.getFullYear() + 543);
             const ts = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const atfScale = (+document.getElementById('atf').value || 100) / 100;
             const li = gCk('left'), mi = gCk('mid'), ri = gCk('right');
             const nm = document.getElementById('p-nm').value || '';
             const ag = document.getElementById('p-ag').value || '';
             const hn = document.getElementById('p-hn').value || '';
             const an = document.getElementById('p-an').value || '';
             const al = document.getElementById('p-al').value || 'NKDA';
+            var sf = atfScale;
             function rI(gs) {
                 return gs.map(function (g) {
-                    var h = '<div class="p-ts">' + g.title + '</div>';
+                    var h = '<div class="p-ts" style="font-size:' + (9 * sf) + 'px">' + g.title + '</div>';
                     h += g.items.map(function (i) {
-                        var line = '<div class="p-ti" style="' + (g.color === 'problem' ? 'font-weight:600' : '') + '">' + (g.color === 'problem' ? '' : '- ') + i.x + '</div>';
+                        var line = '<div class="p-ti" style="font-size:' + (10 * sf) + 'px;' + (g.color === 'problem' ? 'font-weight:600' : '') + '">' + (g.color === 'problem' ? '' : '- ') + i.x + '</div>';
                         if (i.details && i.details.length) {
-                            line += i.details.filter(function (d) { return d.trim() }).map(function (d) { return '<div class="p-ti" style="margin-left:8px;font-size:9px">  → ' + d + '</div>'; }).join('');
+                            line += i.details.filter(function (d) { return d.trim() }).map(function (d) { return '<div class="p-ti" style="margin-left:8px;font-size:' + (9 * sf) + 'px">  → ' + d + '</div>'; }).join('');
                         }
                         return line;
                     }).join('');
                     if (g.notes && g.notes.trim()) {
-                        h += '<div class="p-ti" style="margin-top:3px;font-size:9px">' + g.notes.replace(/\n/g, '<br>') + '</div>';
+                        h += '<div class="p-ti" style="margin-top:3px;font-size:' + (9 * sf) + 'px">' + g.notes.replace(/\n/g, '<br>') + '</div>';
                     }
                     return h;
                 }).join('');
             }
             const gh = sg ? '<div class="go">' + [ax, ax + aw, ddx, ddx + ddw, oox, oox + oow, ccx, ccx + ccw].map(function (v) { return '<div class="gv" style="left:' + v + 'mm"></div>'; }).join('') + '<div class="gh" style="top:' + tty + 'mm"></div></div>' : '';
+            const scaledFs = ffs * atfScale;
             return '<div class="pp">' + gh +
-                '<div class="p-a p-t" style="left:' + ax + 'mm;top:' + tty + 'mm;width:' + aw + 'mm;font-size:' + ffs + 'px">' + rI(li) + '</div>' +
-                '<div class="p-a p-t" style="left:' + ddx + 'mm;top:' + tty + 'mm;width:' + ddw + 'mm;font-size:' + (ffs - 1) + 'px;text-align:center">' + ds + '<br>' + ts + '</div>' +
-                '<div class="p-a p-t" style="left:' + oox + 'mm;top:' + tty + 'mm;width:' + oow + 'mm;font-size:' + ffs + 'px">' + rI(mi) + '</div>' +
-                '<div class="p-a p-t" style="left:' + ccx + 'mm;top:' + tty + 'mm;width:' + ccw + 'mm;font-size:' + ffs + 'px">' + rI(ri) + '</div>' +
-                '<div class="p-a" style="left:' + ax + 'mm;top:280mm;font-size:' + (ffs - 1) + 'px;width:180mm"><span>' + (al !== 'NKDA' ? '● แพ้ยา: ' + al : '○ ไม่แพ้ยา') + '</span></div>' +
-                '<div class="p-a" style="left:12mm;bottom:5mm;font-size:' + (ffs - 1) + 'px;width:190mm"><span>' + nm + '&nbsp;&nbsp;&nbsp;อายุ ' + ag + ' ปี&nbsp;&nbsp;&nbsp;HN: ' + hn + '&nbsp;&nbsp;&nbsp;AN: ' + an + '</span></div>' +
+                '<div class="p-a p-t" style="left:' + ax + 'mm;top:' + tty + 'mm;width:' + aw + 'mm;font-size:' + scaledFs + 'px">' + rI(li) + '</div>' +
+                '<div class="p-a p-t" style="left:' + ddx + 'mm;top:' + tty + 'mm;width:' + ddw + 'mm;font-size:' + (scaledFs - 1) + 'px;text-align:center">' + ds + '<br>' + ts + '</div>' +
+                '<div class="p-a p-t" style="left:' + oox + 'mm;top:' + tty + 'mm;width:' + oow + 'mm;font-size:' + scaledFs + 'px"><div class="p-ts" style="font-weight:700;font-size:' + scaledFs + 'px">Admit</div>' + rI(mi) + '</div>' +
+                '<div class="p-a p-t" style="left:' + ccx + 'mm;top:' + tty + 'mm;width:' + ccw + 'mm;font-size:' + scaledFs + 'px">' + rI(ri) + '</div>' +
                 '</div>';
         }
         function showPv() { document.getElementById('pb').innerHTML = bPP(document.getElementById('gd').checked); document.getElementById('ov').classList.add('sh') }
         function rPv() { document.getElementById('pb').innerHTML = bPP(document.getElementById('gd').checked) }
         function clPv() { document.getElementById('ov').classList.remove('sh') }
-        function testP() { const p = `<div class="pp" style="background:transparent"><div class="tx" style="left:10mm;top:10mm"></div><div class="tx" style="left:100mm;top:10mm"></div><div class="tx" style="left:190mm;top:10mm"></div><div class="tx" style="left:10mm;top:30mm"></div><div class="tx" style="left:55mm;top:30mm"></div><div class="tx" style="left:70mm;top:30mm"></div><div class="tx" style="left:140mm;top:30mm"></div><div style="position:absolute;left:10mm;top:45mm;font-size:9px;color:red;font-family:Sarabun">↑ วางกระดาษ order ทับแล้วดูว่ากากบาทตรงกับเส้นคอลัมน์มั้ย</div></div>`; const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap');*{margin:0;padding:0;box-sizing:border-box}.pp{width:210mm;height:297mm;position:relative;font-family:Sarabun}.tx{position:absolute;width:20px;height:20px}.tx::before{content:'';position:absolute;left:9px;top:0;width:1px;height:20px;background:red}.tx::after{content:'';position:absolute;top:9px;left:0;width:20px;height:1px;background:red}@media print{@page{margin:0;size:A4}}</style></head><body>${p}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
-        function doP() { const h = bPP(false); const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Sarabun',sans-serif}.pp{width:210mm;height:297mm;position:relative;overflow:hidden}.p-a{position:absolute}.p-t{line-height:1.3;color:#000}.p-ti{padding:.5px 0;font-size:10px}.p-ts{font-weight:600;margin-top:3px;font-size:9px;text-decoration:underline}@media print{@page{margin:0;size:A4}body{background:transparent}.pp{background:transparent}}</style></head><body>${h}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
+        function testP() { const p = `<div class="pp" style="background:transparent"><div class="tx" style="left:10mm;top:10mm"></div><div class="tx" style="left:100mm;top:10mm"></div><div class="tx" style="left:190mm;top:10mm"></div><div class="tx" style="left:10mm;top:30mm"></div><div class="tx" style="left:55mm;top:30mm"></div><div class="tx" style="left:70mm;top:30mm"></div><div class="tx" style="left:140mm;top:30mm"></div><div style="position:absolute;left:10mm;top:45mm;font-size:9px;color:red;font-family:ThaiSarabunPSK,TH Sarabun PSK,Sarabun">↑ วางกระดาษ order ทับแล้วดูว่ากากบาทตรงกับเส้นคอลัมน์มั้ย</div></div>`; const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap');*{margin:0;padding:0;box-sizing:border-box}.pp{width:210mm;height:297mm;position:relative;font-family:ThaiSarabunPSK,TH Sarabun PSK,Sarabun}.tx{position:absolute;width:20px;height:20px}.tx::before{content:'';position:absolute;left:9px;top:0;width:1px;height:20px;background:red}.tx::after{content:'';position:absolute;top:9px;left:0;width:20px;height:1px;background:red}@media print{@page{margin:0;size:A4}}</style></head><body>${p}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
+        function doP() { const h = bPP(false); const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');*{margin:0;padding:0;box-sizing:border-box}body{font-family:'ThaiSarabunPSK','TH Sarabun PSK','Sarabun',sans-serif}.pp{width:210mm;height:297mm;position:relative;overflow:hidden}.p-a{position:absolute}.p-t{line-height:1.3;color:#000}.p-ti{padding:.5px 0}.p-ts{font-weight:600;margin-top:3px;text-decoration:none}@media print{@page{margin:0;size:A4}body{background:transparent}.pp{background:transparent}}</style></head><body>${h}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
         document.getElementById('ov').addEventListener('click', function (e) { if (e.target === this) clPv() });
         init();
     </script>
