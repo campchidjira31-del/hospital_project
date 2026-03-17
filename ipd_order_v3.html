@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPD Order Sheet v3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg: #f5f4f0;
+            --sf: #fff;
+            --bd: #d0cdc4;
+            --bl: #e5e3db;
+            --tx: #1a1a18;
+            --t2: #6b6a65;
+            --t3: #9c9b95;
+            --gr: #1a6b4a;
+            --gl: #e8f5ee;
+            --gh: #145a3d;
+            --rd: #c0392b;
+            --rl: #fdecea;
+            --bu: #2471a3;
+            --bul: #eaf2f8;
+            --pu: #7d3c98;
+            --or: #b8860b
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100vw
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            font-size: 14px
+        }
+
+        .hdr {
+            background: var(--sf);
+            border-bottom: 1px solid var(--bd);
+            padding: 7px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100
+        }
+
+        .hdr-t {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gr)
+        }
+
+        .hdr-a {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap
+        }
+
+        .b {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid var(--bd);
+            background: var(--sf);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all .12s;
+            display: flex;
+            align-items: center;
+            gap: 3px
+        }
+
+        .b:hover {
+            background: var(--bg)
+        }
+
+        .bg {
+            background: var(--gr);
+            color: #fff;
+            border-color: var(--gr)
+        }
+
+        .bg:hover {
+            background: var(--gh)
+        }
+
+        .bs {
+            padding: 2px 7px;
+            font-size: 11px
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            height: calc(100vh - 39px)
+        }
+
+        .side {
+            background: var(--sf);
+            border-right: 1px solid var(--bd);
+            overflow-y: auto
+        }
+
+        .ss {
+            padding: 10px;
+            border-bottom: 1px solid var(--bl)
+        }
+
+        .ss h3 {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--t2);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 6px
+        }
+
+        .pg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px
+        }
+
+        .pg .f {
+            grid-column: 1/-1
+        }
+
+        .fl {
+            display: flex;
+            flex-direction: column;
+            gap: 1px
+        }
+
+        .fl label {
+            font-size: 10px;
+            color: var(--t2);
+            font-weight: 600
+        }
+
+        .fl input,
+        .fl select,
+        .fl textarea {
+            padding: 4px 7px;
+            border: 1px solid var(--bd);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px
+        }
+
+        .fl input:focus,
+        .fl textarea:focus {
+            outline: none;
+            border-color: var(--gr)
+        }
+
+        .tl {
+            display: flex;
+            flex-direction: column;
+            gap: 2px
+        }
+
+        .ti {
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all .1s
+        }
+
+        .ti:hover {
+            background: var(--bg)
+        }
+
+        .ti.a {
+            background: var(--gl);
+            border-color: var(--gr)
+        }
+
+        .ti .tn {
+            font-weight: 600;
+            font-size: 12px
+        }
+
+        .ti .td {
+            font-size: 10px;
+            color: var(--t2)
+        }
+
+        .ws {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px
+        }
+
+        .tc {
+            display: grid;
+            grid-template-columns: 26% 38% 36%;
+            gap: 8px;
+            min-height: calc(100vh - 55px);
+            max-width: 100%
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .ch {
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            padding: 5px;
+            border-radius: 4px;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 5
+        }
+
+        .ch-l {
+            background: #5d6d7e
+        }
+
+        .ch-m {
+            background: var(--bu)
+        }
+
+        .ch-r {
+            background: var(--gr)
+        }
+
+        .oc {
+            background: var(--sf);
+            border: 1px solid var(--bl);
+            border-radius: 5px;
+            position: relative
+        }
+
+        .oh {
+            padding: 5px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            font-size: 12px;
+            font-weight: 600
+        }
+
+        .oh .ar {
+            font-size: 12px;
+            color: var(--t2);
+            transition: transform .15s
+        }
+
+        .oc.cl .ar {
+            transform: rotate(-90deg)
+        }
+
+        .oc.cl .ob {
+            display: none
+        }
+
+        .ob {
+            padding: 3px 6px 6px
+        }
+
+        .oi {
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+            padding: 3px 5px;
+            border-radius: 3px;
+            margin: 1px 0;
+            transition: background .08s;
+            position: relative
+        }
+
+        .oi:hover {
+            background: var(--bg)
+        }
+
+        .oi input[type=checkbox] {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--gr);
+            cursor: pointer;
+            margin-top: 2px;
+            flex-shrink: 0
+        }
+
+        .it {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.35;
+            cursor: text;
+            padding: 1px 2px;
+            border-radius: 2px;
+            border: 1px solid transparent;
+            min-height: 18px;
+            outline: none
+        }
+
+        .it:focus {
+            border-color: var(--gr);
+            background: #fff
+        }
+
+        .it.off {
+            color: var(--t3);
+            text-decoration: line-through
+        }
+
+        .it.bold {
+            font-weight: 700;
+            font-size: 12px
+        }
+
+        .prob-detail {
+            margin-left: 22px;
+            padding: 2px 0
+        }
+
+        .prob-detail-item {
+            font-size: 11px;
+            color: var(--t2);
+            padding: 1px 4px;
+            border-radius: 2px;
+            border: 1px solid transparent;
+            outline: none;
+            min-height: 16px;
+            line-height: 1.3;
+            display: block
+        }
+
+        .prob-detail-item:focus {
+            border-color: var(--gr);
+            background: #fff
+        }
+
+        .prob-notes {
+            width: 100%;
+            padding: 5px 7px;
+            border: 1px dashed var(--bd);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            min-height: 50px;
+            resize: vertical;
+            margin-top: 6px
+        }
+
+        .prob-notes:focus {
+            outline: none;
+            border-color: var(--gr);
+            border-style: solid
+        }
+
+        .detail-btn {
+            background: none;
+            border: 1px solid var(--bl);
+            cursor: pointer;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: var(--t2);
+            flex-shrink: 0
+        }
+
+        .detail-btn:hover {
+            background: var(--gl);
+            border-color: var(--gr);
+            color: var(--gr)
+        }
+
+        .ia {
+            display: flex;
+            gap: 1px;
+            opacity: 0;
+            transition: opacity .1s;
+            flex-shrink: 0
+        }
+
+        .oi:hover .ia {
+            opacity: 1
+        }
+
+        .ia button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 1px 3px;
+            border-radius: 2px
+        }
+
+        .ia button:hover {
+            background: var(--bl)
+        }
+
+        .ar-row {
+            display: flex;
+            gap: 3px;
+            margin-top: 4px;
+            position: relative
+        }
+
+        .ar-in {
+            flex: 1;
+            padding: 4px 7px;
+            border: 1px dashed var(--bd);
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 11px
+        }
+
+        .ar-in:focus {
+            outline: none;
+            border-color: var(--gr);
+            border-style: solid
+        }
+
+        .qc-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 4px
+        }
+
+        .qc {
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            border: 1px solid var(--bl);
+            background: var(--sf);
+            cursor: pointer;
+            transition: all .08s;
+            white-space: nowrap
+        }
+
+        .qc:hover {
+            background: var(--gl);
+            border-color: var(--gr)
+        }
+
+        .cc-lab {
+            border-left: 3px solid var(--bu)
+        }
+
+        .cc-iv {
+            border-left: 3px solid var(--pu)
+        }
+
+        .cc-med {
+            border-left: 3px solid var(--gr)
+        }
+
+        .cc-diet {
+            border-left: 3px solid var(--or)
+        }
+
+        .cc-monitor {
+            border-left: 3px solid var(--rd)
+        }
+
+        .cc-problem {
+            border-left: 3px solid #5d6d7e
+        }
+
+        /* Autocomplete dropdown */
+        .ac-drop {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 40px;
+            background: var(--sf);
+            border: 1px solid var(--bd);
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 999;
+            display: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .25)
+        }
+
+        .ac-drop.show {
+            display: block
+        }
+
+        .ac-item {
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid var(--bl);
+            display: flex;
+            justify-content: space-between
+        }
+
+        .ac-item:hover,
+        .ac-item.ac-active {
+            background: var(--gl)
+        }
+
+        .ac-item .ac-name {
+            font-weight: 500
+        }
+
+        .ac-item .ac-dose {
+            color: var(--t2);
+            font-size: 11px
+        }
+
+        /* Overlay */
+        .ov {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 200;
+            overflow-y: auto;
+            padding: 12px
+        }
+
+        .ov.sh {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start
+        }
+
+        .pbox {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            max-width: 860px;
+            width: 100%
+        }
+
+        .pbar {
+            position: sticky;
+            top: 0;
+            background: #2c2c2c;
+            color: #fff;
+            padding: 7px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            font-size: 12px
+        }
+
+        .pbar button {
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, .2);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px
+        }
+
+        .pbar button:hover {
+            background: rgba(255, 255, 255, .1)
+        }
+
+        .pbar .pb {
+            background: var(--gr);
+            border-color: var(--gr)
+        }
+
+        .pctl {
+            background: #3a3a3a;
+            padding: 6px 10px;
+            color: #ccc;
+            font-size: 11px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center
+        }
+
+        .pctl label {
+            display: flex;
+            align-items: center;
+            gap: 3px
+        }
+
+        .pctl input[type=number] {
+            width: 42px;
+            padding: 2px 3px;
+            border-radius: 3px;
+            border: 1px solid #666;
+            background: #555;
+            color: #fff;
+            font-size: 10px
+        }
+
+        .pbody {
+            padding: 16px;
+            background: #e8e8e8;
+            display: flex;
+            justify-content: center
+        }
+
+        .pp {
+            width: 210mm;
+            height: 297mm;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Sarabun', sans-serif;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .2)
+        }
+
+        .p-a {
+            position: absolute
+        }
+
+        .p-t {
+            line-height: 1.3;
+            color: #000
+        }
+
+        .p-ti {
+            padding: .5px 0;
+            font-size: 10px
+        }
+
+        .p-ts {
+            font-weight: 600;
+            margin-top: 3px;
+            font-size: 9px;
+            text-decoration: underline
+        }
+
+        .go {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5
+        }
+
+        .gv {
+            position: absolute;
+            width: 1px;
+            top: 0;
+            bottom: 0;
+            background: rgba(255, 0, 0, .25)
+        }
+
+        .gh {
+            position: absolute;
+            height: 1px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 0, 0, .25)
+        }
+
+        .tx {
+            position: absolute;
+            width: 20px;
+            height: 20px
+        }
+
+        .tx::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 0;
+            width: 1px;
+            height: 20px;
+            background: red
+        }
+
+        .tx::after {
+            content: '';
+            position: absolute;
+            top: 9px;
+            left: 0;
+            width: 20px;
+            height: 1px;
+            background: red
+        }
+
+        @media print {
+            body * {
+                visibility: hidden
+            }
+
+            .pp,
+            .pp * {
+                visibility: visible
+            }
+
+            .pp {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                background: transparent
+            }
+
+            .go {
+                display: none
+            }
+
+            @page {
+                margin: 0;
+                size: A4
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hdr">
+        <div class="hdr-t">📋 Suwannakuha IPD Order</div>
+        <div class="hdr-a">
+            <button class="b" onclick="saveT()">💾 Save</button>
+            <button class="b" onclick="expD()">📤 Export</button>
+            <button class="b" onclick="impD()">📥 Import</button>
+            <button class="b" onclick="clrAll()">🗑 Clear</button>
+            <button class="b" onclick="testP()">📐 Test</button>
+            <button class="b bg" onclick="showPv()">🖨 Print</button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="side">
+            <div class="ss">
+                <h3>ข้อมูลผู้ป่วย</h3>
+                <div class="pg">
+                    <div class="fl"><label>HN</label><input id="p-hn"></div>
+                    <div class="fl"><label>AN</label><input id="p-an"></div>
+                    <div class="fl f"><label>ชื่อ-สกุล</label><input id="p-nm"></div>
+                    <div class="fl"><label>อายุ</label><input id="p-ag" placeholder="ปี"></div>
+                    <div class="fl"><label>Ward</label><select id="p-wd">
+                            <option>หอผู้ป่วยใน</option>
+                            <option>ICU</option>
+                            <option>LR</option>
+                            <option>ER obs</option>
+                        </select></div>
+                    <div class="fl f"><label>แพ้ยา</label><input id="p-al" placeholder="NKDA"></div>
+                </div>
+            </div>
+            <div class="ss">
+                <h3>Templates</h3>
+                <div class="tl" id="tl"></div>
+            </div>
+            <div class="ss">
+                <h3>Saved</h3>
+                <div class="tl" id="sl">
+                    <div style="font-size:11px;color:var(--t3)">ยังไม่มี</div>
+                </div>
+            </div>
+        </div>
+        <div class="ws">
+            <div class="tc">
+                <div class="col" id="cL">
+                    <div class="ch ch-l">Progress Note</div>
+                </div>
+                <div class="col" id="cM">
+                    <div class="ch ch-m">Order for One Day</div>
+                </div>
+                <div class="col" id="cR">
+                    <div class="ch ch-r">Order for Continuation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ov" id="ov">
+        <div class="pbox">
+            <div class="pbar"><span>Preview</span>
+                <div style="display:flex;gap:5px"><button onclick="clPv()">ปิด</button><button class="pb"
+                        onclick="doP()">🖨 Print</button></div>
+            </div>
+            <div class="pctl" id="pc">
+                <label>Prog X:<input type=number id="ax" value=12 step=1 onchange="rPv()">mm</label>
+                <label>Y:<input type=number id="ay" value=32 step=1 onchange="rPv()">mm</label>
+                <label>W:<input type=number id="aw" value=42 step=1 onchange="rPv()">mm</label>
+                <label>|Date X:<input type=number id="dx" value=55 step=1 onchange="rPv()">mm</label>
+                <label>W:<input type=number id="dw" value=14 step=1 onchange="rPv()">mm</label>
+                <label>|1Day X:<input type=number id="ox" value=70 step=1 onchange="rPv()">mm</label>
+                <label>W:<input type=number id="ow" value=68 step=1 onchange="rPv()">mm</label>
+                <label>|Cont X:<input type=number id="cx" value=140 step=1 onchange="rPv()">mm</label>
+                <label>W:<input type=number id="cw" value=60 step=1 onchange="rPv()">mm</label>
+                <label>|TopY:<input type=number id="ty" value=32 step=1 onchange="rPv()">mm</label>
+                <label>Font:<input type=number id="fs" value=10 step=.5 onchange="rPv()">px</label>
+                <label>Guide:<input type=checkbox id="gd" checked onchange="rPv()"></label>
+            </div>
+            <div class="pbody" id="pb"></div>
+        </div>
+    </div>
+    <script>
+        // ============ DRUG DATABASE ============
+        const DR = [
+            { n: "Activated Charcoal 5g", d: "1 dose po", g: "antidote" },
+            { n: "Atropine inj", d: "0.6 mg IV push", g: "antidote" },
+            { n: "Naloxone inj", d: "0.4 mg IV push, repeat prn", g: "antidote" },
+            { n: "Pralidoxime (2-PAM) 1g inj", d: "1 g IV drip in 30 min", g: "antidote" },
+            { n: "Cefazolin 1g inj", d: "1 g IV q 8 hr", g: "atb" },
+            { n: "Ceftazidime 1g inj", d: "2 g IV q 8 hr", g: "atb" },
+            { n: "Ceftriaxone 1g inj", d: "2 g IV OD", g: "atb" },
+            { n: "Cephalexin 500mg", d: " 1x4 po pc", g: "atb" },
+            { n: "Meropenem 1g inj", d: "2 g IV q 8 hr", g: "atb" },
+            { n: "Azithromycin 250mg", d: "2x1 po 5 days ", g: "atb" },
+            { n: "Clarithromycin 500mg", d: " 1x2 po pc", g: "atb" },
+            { n: "Roxithromycin 150mg", d: " 1x2 po ac", g: "atb" },
+            { n: "Amoxicillin 250mg", d: "1x3 po pc", g: "atb" },
+            { n: "Amoxicillin 500mg", d: "1x3 po pc", g: "atb" },
+            { n: "Augmentin 875/125", d: "1x2 po pc", g: "atb" },
+            { n: "Ampicillin 1g inj", d: "2 g IV q 6 hr", g: "atb" },
+            { n: "Cloxacillin 1g inj", d: "2 g IV q 6 hr", g: "atb" },
+            { n: "Dicloxacillin 250mg", d: " 1x4 po ac", g: "atb" },
+            { n: "Penicillin G 5MU inj", d: "2.4 MU IM ", g: "atb" },
+            { n: "Ciprofloxacin 500mg", d: "1x2 po ac", g: "atb" },
+            { n: "Levofloxacin 500mg", d: " 1.5x1 po ac", g: "atb" },
+            { n: "Norfloxacin 400mg", d: " 1x2 po ac", g: "atb" },
+            { n: "Clindamycin 600mg inj", d: "600 mg IV q 8 hr", g: "atb" },
+            { n: "Clindamycin 300mg", d: " 1x4 po pc", g: "atb" },
+            { n: "Co-trimoxazole", d: " 1x2 po pc", g: "atb" },
+            { n: "Doxycycline 100mg", d: "1x2 po pc", g: "atb" },
+            { n: "Metronidazole 400mg", d: "1x3 po pc", g: "atb" },
+            { n: "Metronidazole infusion", d: "500 mg IV q 8 hr", g: "atb" },
+            { n: "Amphotericin B 50mg inj", d: "0.5-1 mg/kg IV drip 4-6 hr", g: "atb" },
+            { n: "Fluconazole 200mg", d: " 1x1 po", g: "atb" },
+            { n: "Acyclovir 400mg", d: "1x5 po pc", g: "atb" },
+            { n: "Oseltamivir 75mg", d: "1x2 po pc x 5 days", g: "atb" },
+            { n: "Albendazole 200mg", d: "2x1 po pc x 3 days", g: "atb" },
+            { n: "Ivermectin 6mg", d: "200 mcg/kg 1x1 po", g: "atb" },
+            { n: "Hydroxychloroquine 200mg", d: " 1x2 po pc", g: "atb" },
+            { n: "Digoxin 0.25mg tab", d: " 1x1 po pc", g: "cv" },
+            { n: "Digoxin 0.25mg inj", d: "0.25 mg IV slow push", g: "cv" },
+            { n: "Adenosine 6mg inj", d: "6 mg rapid IV push", g: "cv" },
+            { n: "Amiodarone 150mg inj", d: "150 mg IV in 30 min, then 900 mg IV drip in 24 hr.", g: "cv" },
+            { n: "Lidocaine 2% inj", d: "1 mg/kg IV bolus", g: "cv" },
+            { n: "Dopamine [2:1]", d: "10 ml/hr IV ", g: "cv" },
+            { n: "Adrenaline 1mg inj", d: "1 mg IV q 3-5 min (CPR)", g: "cv" },
+            { n: "Norepinephrine ", d: "[4:250] IV rate 5 ml/hr, titrate ทีละ 3 ml/hr", g: "cv" },
+            { n: "Isosorbide dinitrate 10mg", d: " 1x3 po ac", g: "cv" },
+            { n: "Isosorbide dinitrate 5mg SL", d: "1 tab SL prn chest pain", g: "cv" },
+            { n: "NTG 5mg/ml inj", d: "10-20 mcg/min IV drip, titrate", g: "cv" },
+            { n: "Enalapril 5mg", d: " 1x1 po pc", g: "ht" },
+            { n: "Enalapril 20mg", d: "1x1 po pc", g: "ht" },
+            { n: "Losartan 50mg", d: "1x1 po pc", g: "ht" },
+            { n: "Captopril 25mg", d: "1x3 po ac", g: "ht" },
+            { n: "Amlodipine 10mg", d: " 1x1 po pc", g: "ht" },
+            { n: "Manidipine 20mg", d: " 1x1 po pc", g: "ht" },
+            { n: "Nicardipine 10mg inj", d: "[1:5] IV rate 5 ml/hr titrate ทีละ 5 ml/hr", g: "ht" },
+            { n: "Metoprolol 100mg", d: "1x2 po pc", g: "ht" },
+            { n: "Atenolol 50mg", d: "1x1 po", g: "ht" },
+            { n: "Carvedilol 6.25mg", d: "0.5x2 po pc", g: "ht" },
+            { n: "Propranolol 10mg", d: "1x2 po pc", g: "ht" },
+            { n: "Hydralazine 25mg tab", d: " 1x3 po pc", g: "ht" },
+            { n: "Hydralazine 20mg inj", d: "20 mg IV slow push ", g: "ht" },
+            { n: "Doxazosin 2mg", d: "1x1 po hs", g: "ht" },
+            { n: "Prazosin 2mg", d: "1x2 po pc", g: "ht" },
+            { n: "Methyldopa 250mg", d: "1x3 po pc", g: "ht" },
+            { n: "Furosemide 40mg tab", d: " 1x1 po pcเช้า", g: "diuretic" },
+            { n: "Furosemide 500mg tab", d: " 1x1 po pc เช้า", g: "diuretic" },
+            { n: "Furosemide 20mg inj", d: "40 mg IV q 6 hr", g: "diuretic" },
+            { n: "Furosemide 250mg inj", d: "250 mg IV drip in 6 hr q 12 hr", g: "diuretic" },
+            { n: "HCTZ 25mg", d: "1x1 po pc เช้า", g: "diuretic" },
+            { n: "Spironolactone 25mg", d: "25 mg 1x1 po pc", g: "diuretic" },
+            { n: "Simvastatin 20mg", d: "20 mg 1x1 po hs", g: "dlp" },
+            { n: "Simvastatin 40mg", d: "40 mg 1x1 po hs", g: "dlp" },
+            { n: "Atorvastatin 40mg", d: "40 mg 1x1 po hs", g: "dlp" },
+            { n: "Gemfibrozil 600mg", d: "600 mg 1x2 po ac", g: "dlp" },
+            { n: "Fenofibrate 100mg", d: "100 mg 1x1 po pc", g: "dlp" },
+            { n: "Aspirin 81mg", d: " 1x1 po pc", g: "coag" },
+            { n: "Aspirin 300mg", d: " 1x1 po pc ", g: "coag" },
+            { n: "Clopidogrel 75mg", d: "1x1 po pc", g: "coag" },
+            { n: "Warfarin 3mg", d: "1x1 po hs", g: "coag" },
+            { n: "Warfarin 5mg", d: " 1x1 po hs", g: "coag" },
+            { n: "Vitamin K1 10mg inj", d: "IV slow push", g: "coag" },
+            { n: "Tranexamic acid 250mg inj", d: "500 mg IV q 8 hr", g: "coag" },
+            { n: "Streptokinase 1.5MU", d: "1.5 MU IV drip in 60 min", g: "coag" },
+            { n: "Paracetamol 500mg", d: "1 tab prn q 4-6 hr po ", g: "pain" },
+            { n: "Ibuprofen 400mg", d: "1x3 po pc", g: "pain" },
+            { n: "Diclofenac 25mg tab", d: "1x3 po pc", g: "pain" },
+            { n: "Diclofenac 75mg inj", d: "1 amp IM prn q 12 hr", g: "pain" },
+            { n: "Tramadol 50mg cap", d: " 1x3 po pc prn", g: "pain" },
+            { n: "Tramadol 50mg inj", d: "50 mg IV prn q 8 hr", g: "pain" },
+            { n: "Morphine 10mg inj", d: "3 mg IV prn q 4 hr", g: "pain" },
+            { n: "Morphine SR 10mg", d: " 1 tab po q 12 hr", g: "pain" },
+            { n: "Pethidine 50mg inj", d: "25 mg IV prn q 4-6 hr", g: "pain" },
+            { n: "Fentanyl inj", d: "25 mcg IV prn", g: "pain" },
+            { n: "Fentanyl patch 12mcg/hr", d: "1 patch q 72 hr", g: "pain" },
+            { n: "Orpar (Para+Orphenadrine)", d: "1x3 po pc", g: "pain" },
+            { n: "Phenytoin 100mg", d: " 3x1 po hs", g: "neuro" },
+            { n: "Phenytoin 250mg inj", d: "750 mg IV loading in 1 hr", g: "neuro" },
+            { n: "Phenobarbital 60mg", d: " 1x1 po hs", g: "neuro" },
+            { n: "Sodium valproate 200mg", d: " 1x3 po pc", g: "neuro" },
+            { n: "Carbamazepine 200mg", d: " 1x2 po pc", g: "neuro" },
+            { n: "Gabapentin 300mg", d: " 1x1 po hs", g: "neuro" },
+            { n: "Levodopa/Carbidopa 100/25", d: "1x3 po ac", g: "neuro" },
+            { n: "Trihexyphenidyl 2mg", d: " 1x2 po pc", g: "neuro" },
+            { n: "Baclofen 10mg", d: "1x3 po pc", g: "neuro" },
+            { n: "Betahistine 6mg", d: " 1x3 po pc", g: "neuro" },
+            { n: "Dimenhydrinate 50mg tab", d: "1x3 po pc prn", g: "neuro" },
+            { n: "Metformin 500mg", d: " 1x2 po pc", g: "dm" },
+            { n: "Glipizide 5mg", d: " 1x1 po ac ", g: "dm" },
+            { n: "Pioglitazone 30mg", d: " 1x1 po pc", g: "dm" },
+            { n: "Regular Insulin (RI) inj", d: " unit sc ", g: "dm" },
+            { n: "NPH Insulin inj", d: "10 u SC hs", g: "dm" },
+            { n: "Mixtard 70/30 inj", d: " เช้า u เย็น u sc ac ", g: "dm" },
+            { n: "Methimazole 5mg", d: "3x1 po pc", g: "endo" },
+            { n: "Propylthiouracil 50mg", d: " 1x3 po pc", g: "endo" },
+            { n: "Thyroxine 100mcg", d: " 1x1 po ac ", g: "endo" },
+            { n: "Dexamethasone 4mg inj", d: "4 mg IV q 6 hr", g: "steroid" },
+            { n: "Hydrocortisone 100mg inj", d: "100 mg IV q 8 hr", g: "steroid" },
+            { n: "Prednisolone 5mg", d: " 1x2 po pc ", g: "steroid" },
+            { n: "Omeprazole 20mg cap", d: "1x1 po ac ", g: "gi" },
+            { n: "Omeprazole 40mg inj", d: "40 mg IV OD", g: "gi" },
+            { n: "Omeprazole 80mg IV drip", d: "80 mg IV bolus then 8 mg/hr drip", g: "gi" },
+            { n: "Famotidine 20mg", d: " 1x1 po ac", g: "gi" },
+            { n: "Antacid suspension", d: "2 ช้อนโต๊ะ po pc tid", g: "gi" },
+            { n: "Simethicone 80mg", d: " 1x3 po pc", g: "gi" },
+            { n: "Hyoscine 20mg inj", d: "20 mg IV x 1 dose", g: "gi" },
+            { n: "Metoclopramide (Plasil) 10mg inj", d: "10 mg IV prn q 8 hr", g: "gi" },
+            { n: "Domperidone 10mg", d: " 1x3 po ac", g: "gi" },
+            { n: "Dimenhydrinate 50mg inj", d: "50 mg IV prn", g: "gi" },
+            { n: "Lactulose solution", d: "30 ml po hs", g: "gi" },
+            { n: "Senolax 7.5mg", d: "2 tab po hs", g: "gi" },
+            { n: "Milk of Magnesia", d: "30 ml po hs prn", g: "gi" },
+            { n: "Salbutamol nebulization", d: "[2:2] 1 NB q 6 hr prn", g: "resp" },
+            { n: "Salbutamol inhaler MDI", d: "2 puff prn q 4 hr", g: "resp" },
+            { n: "Berodual nebulization", d: "[2:2] 1 neb q 4 hr", g: "resp" },
+            { n: "Budesonide inhaler", d: "200 mcg 1 puff x2", g: "resp" },
+            { n: "Theophylline SR 200mg", d: "1x2 po pc", g: "resp" },
+            { n: "Acetylcysteine 200mg", d: " 1x3 po pc", g: "resp" },
+            { n: "Chlorpheniramine 4mg", d: " 1x3 po pc", g: "allergy" },
+            { n: "Chlorpheniramine 10mg inj", d: "10 mg IV ", g: "allergy" },
+            { n: "Loratadine 10mg", d: "1x1 po", g: "allergy" },
+            { n: "Hydroxyzine 10mg", d: "1x3 po pc", g: "allergy" },
+            { n: "Haloperidol 5mg inj", d: "5 mg IM prn q 4 hr", g: "psych" },
+            { n: "Haloperidol 2mg tab", d: " 1x1 po hs", g: "psych" },
+            { n: "Chlorpromazine 100mg", d: "1x1 po hs", g: "psych" },
+            { n: "Risperidone 2mg", d: "1x1 po hs", g: "psych" },
+            { n: "Diazepam 5mg tab", d: " 1x1 po hs prn", g: "psych" },
+            { n: "Diazepam 10mg inj", d: "10 mg IV prn q 4 hr", g: "psych" },
+            { n: "Lorazepam 0.5mg", d: "1x1 po hs", g: "psych" },
+            { n: "Lorazepam 1mg", d: " 1x1 po hs", g: "psych" },
+            { n: "Amitriptyline 25mg", d: " 1x1 po hs", g: "psych" },
+            { n: "Fluoxetine 20mg", d: " 1x1 po เช้า", g: "psych" },
+            { n: "Sertraline 50mg", d: " 1x1 po pc", g: "psych" },
+            { n: "Trazodone 50mg", d: "1x1 po hs", g: "psych" },
+            { n: "Allopurinol 100mg", d: " 1x1 po pc", g: "gout" },
+            { n: "Colchicine 0.6mg", d: " 1x2 po pc", g: "gout" },
+            { n: "Multivitamin tab", d: "1x1 po pc", g: "vit" },
+            { n: "Folic acid 5mg", d: " 1x1 po pc", g: "vit" },
+            { n: "Ferrous fumarate 200mg", d: " 1x1 po pc", g: "vit" },
+            { n: "Calcium carbonate 1000mg", d: "1x1 po pc", g: "vit" },
+            { n: "Vitamin B complex tab", d: "1x3 po pc", g: "vit" },
+            { n: "Vitamin B1-6-12 tab", d: "1x3 po pc", g: "vit" },
+            { n: "Vitamin C 100mg", d: " 1x3 po pc", g: "vit" },
+            { n: "KCl 500mg tab", d: "1x3 po pc", g: "vit" },
+            { n: "KCl elixir", d: "30 ml po pc q 3 hr x 3 doses", g: "vit" },
+            { n: "MgSO4 10% inj", d: "2 g IV drip in 4 hr", g: "elyte" },
+            { n: "MgSO4 50% inj", d: "4 g IV loading then 1 g/hr drip", g: "elyte" },
+            { n: "Calcium gluconate 10% inj", d: "10 ml IV slow push", g: "elyte" },
+            { n: "KCl 40mEq inj", d: "40 mEq in IV fluid", g: "elyte" },
+            { n: "NaHCO3 7.5% inj", d: "1 amp IV drip in 1 hr", g: "elyte" },
+            { n: "Dextrose 50% inj", d: "50 ml IV push", g: "elyte" },
+            { n: "0.9%NSS 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "0.9%NSS 500ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "5%D/N/2 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "5%DW 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "5%DW 500ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "D-5-S 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "D-5-S/3 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "D-10-W 500ml", d: "IV drip", g: "iv" },
+            { n: "R-cetate 1000ml", d: "IV drip rate 80 ml/hr", g: "iv" },
+            { n: "3%NaCl 500ml", d: "IV drip 30 ml/hr x 4 hr", g: "iv" },
+            { n: "Hep lock", d: "flush q 8 hr", g: "iv" },
+            { n: "Methylergometrine 0.2mg inj", d: "0.2 mg IM/IV", g: "ob" },
+            { n: "Oxytocin 10IU inj", d: "10-20 IU in NSS 1000ml IV drip", g: "ob" },
+        ];
+
+        // ============ TEMPLATES ============
+        // Right column order: Diet → Monitoring → Standing Med
+        const T = {
+            alc_hep: {
+                name: "Alcoholic Hepatitis/Cirrhosis", desc: "ตับอักเสบจากแอลกอฮอล์",
+                dx: "1. Alcoholic hepatitis\n2. Cirrhosis\n3. Alcohol dependence",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte, LFT", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "Hepatitis B & C screening", c: 0 }, { x: "Blood sugar", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "LFT", "Coag", "HBsAg/AntiHCV"] },
+                    { t: "Investigation", color: "lab", items: [{ x: "CXR PA upright", c: 1 }, { x: "US whole abdomen", c: 1 }], quick: ["CXR", "US abdomen", "CT abdomen", "EGD"] },
+                    { t: "IV Fluid", color: "iv", items: [{ x: "0.9%NSS 1000ml IV drip rate 80 ml/hr", c: 1 }, { x: "5%D/N/2 1000ml IV drip rate 80 ml/hr", c: 0 }, { x: "Hep lock", c: 0 }], quick: ["0.9%NSS 1000ml IV rate 80 ml/hr", "5%D/N/2 1000ml IV rate 80 ml/hr", "R-cetate 1000ml IV rate 80 ml/hr", "Hep lock"] },
+                    { t: "One-day Medication", color: "med", items: [{ x: "Plasil 10 mg IV prn q 8 hr", c: 1 }, { x: "Thiamine 100 mg IV x 1", c: 1 }, { x: "Valium 10 mg IV prn q 2 hr (withdrawal)", c: 0 }, { x: "Vitamin K 10 mg IV x 1", c: 0 }], quick: ["Plasil 10mg IV prn", "Morphine 3mg IV prn", "Paracetamol 500mg prn", "Valium 10mg IV prn"] },
+                    { t: "Other", color: "general", items: [], quick: ["O2 cannula ___ L/min keep SpO2>94%", "O2 mask with bag ___ L/min", "Foley cath", "NG tube", "On ventilator"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [{ x: "Soft diet", c: 1 }, { x: "No alcohol", c: 1 }, { x: "Bed rest", c: 1 }], quick: ["Regular diet", "Soft diet", "NPO", "Bed rest", "Ambulate"] },
+                    { t: "Monitoring", color: "monitor", items: [{ x: "Record V/S q 4 hr, I/O, consciousness", c: 1 }, { x: "CIWA-Ar q 4 hr (withdrawal)", c: 0 }, { x: "Notify: GCS drop, GI bleeding, fever, BP<90", c: 1 }], quick: ["V/S q 4hr", "V/S q 2hr", "Strict I/O", "Daily weight", "Neuro check"] },
+                    { t: "Standing Medication", color: "med", items: [{ x: "Lactulose 30 ml po hs", c: 1 }, { x: "Senolax 2 tab po hs", c: 0 }, { x: "Thiamine 100 mg 1x1 po pc", c: 1 }, { x: "Folic acid 5 mg 1x1 po pc", c: 1 }, { x: "Multivitamin 1x1 po pc", c: 1 }, { x: "GF-3 25 ml po OD", c: 0 }, { x: "Omeprazole 20 mg 1x1 po ac", c: 0 }, { x: "Propranolol 10 mg 1x2 po pc", c: 0 }, { x: "Spironolactone 50 mg 1x1 po pc", c: 0 }, { x: "Furosemide 40 mg 1x1 po เช้า", c: 0 }], quick: ["Lactulose 30ml hs", "Omeprazole 20mg ac", "Propranolol 10mg", "Spironolactone 25mg"] }
+                ]
+            },
+            pneumonia: {
+                name: "CAP/Pneumonia", desc: "ปอดอักเสบ",
+                dx: "1. Community-acquired pneumonia\n2. Sepsis",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte", c: 1 }, { x: "Blood culture x 2", c: 1 }, { x: "Sputum G/S & C/S", c: 1 }, { x: "Blood sugar", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "Blood C/S x2", "Sputum C/S", "Procalcitonin"] },
+                    { t: "Investigation", color: "lab", items: [{ x: "CXR PA upright", c: 1 }], quick: ["CXR", "CT chest"] },
+                    { t: "IV Fluid", color: "iv", items: [{ x: "0.9%NSS 1000ml IV drip rate 80 ml/hr", c: 1 }], quick: ["0.9%NSS 1000ml IV rate 80 ml/hr", "5%D/N/2 1000ml IV rate 80 ml/hr", "Hep lock"] },
+                    { t: "One-day Medication", color: "med", items: [{ x: "Ceftriaxone 2 g IV OD", c: 1 }, { x: "Azithromycin 500 mg po OD", c: 0 }, { x: "Paracetamol 500 mg 1-2 tab prn q 4-6 hr", c: 1 }, { x: "NSS nebulization prn", c: 0 }], quick: ["Ceftriaxone 2g IV OD", "Ceftriaxone 1g IV OD", "Azithromycin 500mg po", "Paracetamol 500mg prn"] },
+                    { t: "Other", color: "general", items: [{ x: "O2 cannula ___ L/min keep SpO2>94%", c: 1 }], quick: ["O2 cannula ___ L/min keep SpO2>94%", "O2 mask with bag ___ L/min", "Suction prn", "Foley cath"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [{ x: "Soft diet", c: 1 }, { x: "Head elevation 30-45°", c: 1 }], quick: ["Regular diet", "Soft diet", "NPO"] },
+                    { t: "Monitoring", color: "monitor", items: [{ x: "V/S q 4 hr, SpO2", c: 1 }, { x: "I/O record", c: 1 }, { x: "Notify: SpO2<92%, RR>30, BP<90, high fever", c: 1 }], quick: ["V/S q 4hr", "V/S q 2hr", "Strict I/O"] },
+                    { t: "Standing Medication", color: "med", items: [{ x: "Ceftriaxone 2 g IV OD", c: 1 }, { x: "Paracetamol 500 mg prn q 4-6 hr", c: 1 }], quick: ["Salbutamol NB prn", "Bromhexine", "Acetylcysteine 200mg"] }
+                ]
+            },
+            dka: {
+                name: "DKA", desc: "Diabetic ketoacidosis",
+                dx: "1. DKA\n2. T2DM uncontrolled",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte", c: 1 }, { x: "Blood sugar STAT", c: 1 }, { x: "VBG/ABG", c: 1 }, { x: "Urine ketone", c: 1 }, { x: "HbA1C", c: 1 }], quick: ["CBC", "BUN/Cr/Elyte", "ABG", "Urine ketone", "HbA1C"] },
+                    { t: "IV Fluid (DKA)", color: "iv", items: [{ x: "0.9%NSS 1000ml IV in 1 hr", c: 1 }, { x: "then 0.9%NSS 1000ml IV in 2 hr", c: 1 }, { x: "then 0.9%NSS 500ml + KCl 20mEq in 2 hr", c: 1 }, { x: "เมื่อ BS<250: 5%DNS 1000ml IV", c: 1 }], quick: ["0.9%NSS 1000ml", "5%DNS 1000ml", "KCl 20mEq"] },
+                    { t: "Insulin", color: "med", items: [{ x: "RI 0.1 u/kg IV bolus then 0.1 u/kg/hr drip", c: 1 }, { x: "Target: ลด BS 50-70 mg/dL/hr", c: 1 }], quick: ["RI IV drip", "RI SC sliding scale"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [{ x: "NPO จนกว่า alert + ไม่คลื่นไส้", c: 1 }], quick: ["NPO", "Clear liquid", "Soft diet"] },
+                    { t: "Monitoring", color: "monitor", items: [{ x: "DTX q 1 hr", c: 1 }, { x: "V/S q 1 hr x 4 then q 2 hr", c: 1 }, { x: "Strict I/O", c: 1 }, { x: "Repeat Electrolyte q 4-6 hr", c: 1 }, { x: "Notify: BS<70, K<3.5, K>5.5, pH<7.1", c: 1 }], quick: ["DTX q 1hr", "DTX q 4hr", "V/S q 1hr", "Repeat Elyte"] },
+                    { t: "Standing Medication", color: "med", items: [], quick: [] }
+                ]
+            },
+            acs: {
+                name: "ACS/STEMI", desc: "Acute coronary syndrome",
+                dx: "1. ACS (STEMI/NSTEMI/UA)\n2. HT\n3. DLP",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [{ x: "CBC, BUN, Cr, Electrolyte, FBS", c: 1 }, { x: "Troponin STAT + repeat 3-6hr", c: 1 }, { x: "Lipid profile", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "12-lead ECG STAT", c: 1 }, { x: "CXR portable", c: 1 }], quick: ["CBC", "Troponin", "Lipid", "Coag", "ECG", "CXR"] },
+                    { t: "Medication STAT", color: "med", items: [{ x: "ASA 325 mg chew STAT", c: 1 }, { x: "Clopidogrel 300 mg loading", c: 1 }, { x: "Atorvastatin 80 mg STAT", c: 1 }, { x: "NTG 0.4 mg SL prn", c: 1 }, { x: "Enoxaparin 1 mg/kg SC q 12 hr", c: 1 }, { x: "Morphine 2-4 mg IV prn", c: 0 }], quick: ["ASA 325mg", "Clopi 300mg", "Atorva 80mg", "NTG SL", "Enoxaparin"] },
+                    { t: "Other", color: "general", items: [{ x: "O2 cannula 3 L/min keep SpO2>94%", c: 1 }], quick: ["O2 cannula ___ L/min keep SpO2>94%", "O2 mask with bag ___ L/min", "Cardiac monitor"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [{ x: "Soft diet", c: 1 }, { x: "Bed rest", c: 1 }], quick: ["Regular diet", "NPO"] },
+                    { t: "Monitoring", color: "monitor", items: [{ x: "Cardiac monitor", c: 1 }, { x: "V/S q 15min x 4, then q 1hr", c: 1 }, { x: "Notify: chest pain, SBP<90, arrhythmia", c: 1 }, { x: "Consult cardiologist / Refer PCI", c: 1 }], quick: ["V/S q 15min", "V/S q 1hr", "Strict I/O"] },
+                    { t: "Standing Medication", color: "med", items: [{ x: "ASA 81 mg 1x1 po pc", c: 1 }, { x: "Clopidogrel 75 mg 1x1 po pc", c: 1 }, { x: "Atorvastatin 40 mg 1x1 po hs", c: 1 }], quick: ["Metoprolol 50mg 1x2 pc", "Enalapril 5mg 1x1 pc", "Isosorbide 10mg 1x3 ac"] }
+                ]
+            },
+            ugib: {
+                name: "UGIB", desc: "Upper GI bleeding",
+                dx: "1. Upper GI bleeding\n2. PUD/Variceal",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [{ x: "CBC STAT + repeat q 6-8 hr", c: 1 }, { x: "BUN, Cr, Electrolyte", c: 1 }, { x: "Coagulogram", c: 1 }, { x: "Blood group + XM 2u PRC", c: 1 }, { x: "LFT", c: 0 }], quick: ["CBC", "BUN/Cr/Elyte", "Coag", "XM 2u PRC", "LFT"] },
+                    { t: "IV Fluid & Blood", color: "iv", items: [{ x: "0.9%NSS 1000ml IV FAST", c: 1 }, { x: "PRC transfusion ถ้า Hb<7", c: 1 }], quick: ["0.9%NSS 1000ml FAST", "PRC 1 unit", "FFP"] },
+                    { t: "Medication", color: "med", items: [{ x: "Omeprazole 80 mg IV bolus then 8 mg/hr drip", c: 1 }, { x: "Octreotide 50 mcg IV bolus then drip (variceal)", c: 0 }, { x: "Ceftriaxone 1g IV OD (cirrhosis)", c: 0 }], quick: ["Omeprazole 80mg IV drip", "Octreotide drip", "Vitamin K 10mg IV"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [{ x: "NPO", c: 1 }], quick: ["NPO", "Clear liquid"] },
+                    { t: "Monitoring", color: "monitor", items: [{ x: "V/S q 15min until stable", c: 1 }, { x: "Strict I/O", c: 1 }, { x: "Monitor stool color", c: 1 }, { x: "Consult GI for EGD within 24hr", c: 1 }, { x: "Notify: hematemesis, SBP<90, Hb drop>2", c: 1 }], quick: ["NG decompression", "V/S q 15min", "Repeat CBC q 6hr"] },
+                    { t: "Standing Medication", color: "med", items: [], quick: [] }
+                ]
+            },
+            blank: {
+                name: "Blank", desc: "เริ่มจากว่าง", dx: "",
+                left: [{ t: "Problem List", color: "problem", items: [], quick: [] }],
+                mid: [
+                    { t: "Lab", color: "lab", items: [], quick: ["CBC", "BUN/Cr/Elyte", "LFT", "Coag", "FBS", "UA", "HbA1C", "Lipid"] },
+                    { t: "Investigation", color: "lab", items: [], quick: ["CXR", "US abdomen", "CT brain", "ECG", "Echo"] },
+                    { t: "IV Fluid", color: "iv", items: [], quick: ["0.9%NSS 1000ml IV rate 80 ml/hr", "5%D/N/2 1000ml IV rate 80 ml/hr", "R-cetate 1000ml IV rate 80 ml/hr", "Hep lock"] },
+                    { t: "One-day Medication", color: "med", items: [], quick: ["Paracetamol 500mg prn", "Omeprazole 40mg IV", "Plasil 10mg IV prn", "Tramadol 50mg IV prn"] },
+                    { t: "Other", color: "general", items: [], quick: ["O2 cannula ___ L/min keep SpO2>94%", "O2 mask with bag ___ L/min", "Foley cath", "NG tube", "On ventilator", "Suction prn"] }
+                ],
+                right: [
+                    { t: "Diet & Activity", color: "diet", items: [], quick: ["Regular diet", "Soft diet", "NPO", "Bed rest", "Ambulate"] },
+                    { t: "Monitoring", color: "monitor", items: [], quick: ["V/S q 4hr", "V/S q 2hr", "I/O record", "Strict I/O", "DTX q 6hr", "Neuro check"] },
+                    { t: "Standing Medication", color: "med", items: [], quick: [] }
+                ]
+            }
+        };
+
+        let O = { left: [], mid: [], right: [] }, sv = {};
+        function init() { try { sv = JSON.parse(localStorage.getItem('ipd3s') || '{}') } catch (e) { } rTL(); ldT('blank') }
+        function rTL() { const e = document.getElementById('tl'); e.innerHTML = ''; for (const [k, t] of Object.entries(T)) { const d = document.createElement('div'); d.className = 'ti'; d.innerHTML = `<div class="tn">${t.name}</div><div class="td">${t.desc}</div>`; d.onclick = () => { document.querySelectorAll('.ti').forEach(x => x.classList.remove('a')); d.classList.add('a'); ldT(k) }; e.appendChild(d) } rSL() }
+        function rSL() { const e = document.getElementById('sl'); const k = Object.keys(sv); if (!k.length) { e.innerHTML = '<div style="font-size:11px;color:var(--t3)">ยังไม่มี</div>'; return } e.innerHTML = ''; k.forEach(n => { const d = document.createElement('div'); d.className = 'ti'; d.innerHTML = `<div class="tn">${n}</div><div style="display:flex;gap:3px;margin-top:2px"><button class="b bs" onclick="event.stopPropagation();ldSv('${n}')">Load</button><button class="b bs" style="color:var(--rd)" onclick="event.stopPropagation();dlSv('${n}')">Del</button></div>`; e.appendChild(d) }) }
+        function ldT(k) { const t = T[k]; if (!t) return; O = { left: JSON.parse(JSON.stringify(t.left)), mid: JSON.parse(JSON.stringify(t.mid)), right: JSON.parse(JSON.stringify(t.right)) }; if (t.dx && O.left[0]) O.left[0].items = t.dx.split('\n').filter(l => l.trim()).map(l => ({ x: l.trim(), c: 1 })); rA() }
+        function rA() { rC('cL', O.left, 'left'); rC('cM', O.mid, 'mid'); rC('cR', O.right, 'right') }
+        function rC(id, secs, ck) {
+            const col = document.getElementById(id); const h = col.querySelector('.ch'); col.innerHTML = ''; col.appendChild(h);
+            secs.forEach((s, si) => {
+                const c = document.createElement('div'); c.className = 'oc cc-' + s.color;
+                const isProblem = (s.color === 'problem');
+                let ih = '';
+                s.items.forEach((it, ii) => {
+                    const ofCls = it.c ? '' : 'off';
+                    const boldCls = isProblem ? ' bold' : '';
+                    ih += '<div class="oi"><input type=checkbox ' + (it.c ? 'checked' : '') + ' onchange="tg(\'' + ck + '\',' + si + ',' + ii + ',this.checked)"><div class="it ' + ofCls + boldCls + '" contenteditable="true" onblur="ub(\'' + ck + '\',' + si + ',' + ii + ',this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">' + it.x + '</div>';
+                    if (isProblem) { ih += '<button class="detail-btn" onclick="addDt(\'' + ck + '\',' + si + ',' + ii + ')" title="เพิ่ม detail">+ detail</button>'; }
+                    ih += '<div class="ia"><button onclick="dl(\'' + ck + '\',' + si + ',' + ii + ')">✕</button></div></div>';
+                    if (isProblem && it.details && it.details.length) {
+                        ih += '<div class="prob-detail">';
+                        it.details.forEach((dt, di) => {
+                            ih += '<div style="display:flex;align-items:center;gap:3px;margin:1px 0"><span style="font-size:10px;color:var(--t3)">↳</span><div class="prob-detail-item" contenteditable="true" onblur="ubDt(\'' + ck + '\',' + si + ',' + ii + ',' + di + ',this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">' + dt + '</div><button style="background:none;border:none;cursor:pointer;font-size:10px;color:var(--rd);opacity:0.5" onclick="dlDt(\'' + ck + '\',' + si + ',' + ii + ',' + di + ')" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">✕</button></div>';
+                        });
+                        ih += '</div>';
+                    }
+                });
+                let qh = '';
+                if (s.quick && s.quick.length) {
+                    qh = '<div class="qc-wrap">';
+                    s.quick.forEach(q => {
+                        qh += '<span class="qc" onclick="qa(\'' + ck + '\',' + si + ',\'' + q.replace(/'/g, "\\'") + '\')">' + (q.length > 30 ? q.substring(0, 28) + '..' : q) + '</span>';
+                    });
+                    qh += '</div>';
+                }
+                let notesHtml = '';
+                if (isProblem) {
+                    const nVal = s.notes || '';
+                    notesHtml = '<textarea class="prob-notes" placeholder="รายละเอียดเพิ่มเติม / Progress note..." onblur="ubNotes(\'' + ck + '\',' + si + ',this)">' + nVal + '</textarea>';
+                }
+                c.innerHTML = '<div class="oh" onclick="this.parentElement.classList.toggle(\'cl\')"><span>' + s.t + '</span><span class="ar">▼</span></div><div class="ob"><div class="ois">' + ih + '</div><div class="ar-row"><input class="ar-in" placeholder="+ พิมพ์ชื่อยาหรือรายการ..." oninput="acS(this,\'' + ck + '\',' + si + ')" onkeydown="acK(event,this,\'' + ck + '\',' + si + ')" onfocus="acS(this,\'' + ck + '\',' + si + ')" onblur="setTimeout(function(){acH(event.target)},200)"><button class="b bs" onclick="aI(\'' + ck + '\',' + si + ',this.previousElementSibling)">+</button><div class="ac-drop"></div></div>' + qh + notesHtml + '</div>';
+                col.appendChild(c);
+            });
+        }
+
+        // Inline edit update
+        function ub(ck, si, ii, el) { O[ck][si].items[ii].x = el.textContent.trim() }
+        function ubDt(ck, si, ii, di, el) { O[ck][si].items[ii].details[di] = el.textContent.trim() }
+        function ubNotes(ck, si, el) { O[ck][si].notes = el.value }
+        function addDt(ck, si, ii) {
+            if (!O[ck][si].items[ii].details) O[ck][si].items[ii].details = [];
+            O[ck][si].items[ii].details.push('');
+            rA();
+            // Focus the new detail item
+            setTimeout(function () {
+                var col = document.getElementById(ck === 'left' ? 'cL' : ck === 'mid' ? 'cM' : 'cR');
+                var details = col.querySelectorAll('.prob-detail-item');
+                if (details.length) details[details.length - 1].focus();
+            }, 100);
+        }
+        function dlDt(ck, si, ii, di) { O[ck][si].items[ii].details.splice(di, 1); rA() }
+        function tg(ck, si, ii, c) { O[ck][si].items[ii].c = c ? 1 : 0; rA() }
+        function dl(ck, si, ii) { O[ck][si].items.splice(ii, 1); rA() }
+        function aI(ck, si, inp) { const v = inp.value.trim(); if (!v) return; O[ck][si].items.push({ x: v, c: 1 }); inp.value = ''; acH(inp); rA() }
+        function qa(ck, si, txt) { O[ck][si].items.push({ x: txt, c: 1 }); rA() }
+
+        // ============ AUTOCOMPLETE with arrow keys ============
+        var acIdx = -1;
+        function acS(inp, ck, si) { acIdx = -1; const v = inp.value.trim().toLowerCase(); const dd = inp.parentElement.querySelector('.ac-drop'); if (v.length < 2) { dd.classList.remove('show'); dd.innerHTML = ''; return } const matches = DR.filter(function (d) { return d.n.toLowerCase().includes(v) }).slice(0, 15); if (!matches.length) { dd.classList.remove('show'); dd.innerHTML = ''; return } dd.innerHTML = matches.map(function (d, i) { return '<div class="ac-item" onmousedown="acPk(this,\'' + ck + '\',' + si + ')" data-full="' + d.n + ' ' + d.d + '"><span class="ac-name">' + d.n + '</span><span class="ac-dose">' + d.d + '</span></div>'; }).join(''); dd.classList.add('show') }
+        function acK(e, inp, ck, si) {
+            var dd = inp.parentElement.querySelector('.ac-drop');
+            var items = dd.querySelectorAll('.ac-item');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                acIdx = Math.min(acIdx + 1, items.length - 1);
+                acHL(items); return;
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                acIdx = Math.max(acIdx - 1, 0);
+                acHL(items); return;
+            }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (acIdx >= 0 && items[acIdx] && dd.classList.contains('show')) {
+                    var txt = items[acIdx].dataset.full;
+                    O[ck][si].items.push({ x: txt, c: 1 }); inp.value = ''; dd.classList.remove('show'); acIdx = -1; rA();
+                } else if (dd.classList.contains('show') && items.length > 0) {
+                    var txt = items[0].dataset.full;
+                    O[ck][si].items.push({ x: txt, c: 1 }); inp.value = ''; dd.classList.remove('show'); acIdx = -1; rA();
+                } else { aI(ck, si, inp); }
+                return;
+            }
+            if (e.key === 'Escape') { acH(inp); acIdx = -1; return; }
+        }
+        function acHL(items) { items.forEach(function (el, i) { el.classList.toggle('ac-active', i === acIdx); if (i === acIdx) el.scrollIntoView({ block: 'nearest' }); }) }
+        function acPk(el, ck, si) { const txt = el.dataset.full; O[ck][si].items.push({ x: txt, c: 1 }); const inp = el.closest('.ar-row').querySelector('.ar-in'); inp.value = ''; el.closest('.ac-drop').classList.remove('show'); acIdx = -1; rA() }
+        function acH(inp) { const dd = inp.parentElement.querySelector('.ac-drop'); if (dd) dd.classList.remove('show'); acIdx = -1 }
+
+        // ============ SAVE/EXPORT/IMPORT ============
+        function clrAll() { if (!confirm('ล้างทั้งหมด?')) return;['p-hn', 'p-an', 'p-nm', 'p-ag', 'p-al'].forEach(id => { const e = document.getElementById(id); if (e) e.value = '' }); ldT('blank') }
+        function saveT() { const n = prompt('ชื่อ template:'); if (!n) return; sv[n] = JSON.parse(JSON.stringify(O)); localStorage.setItem('ipd3s', JSON.stringify(sv)); rSL() }
+        function ldSv(n) { O = JSON.parse(JSON.stringify(sv[n])); rA() }
+        function dlSv(n) { if (!confirm(`ลบ "${n}"?`)) return; delete sv[n]; localStorage.setItem('ipd3s', JSON.stringify(sv)); rSL() }
+        function expD() { const d = { pt: { hn: document.getElementById('p-hn').value, an: document.getElementById('p-an').value, nm: document.getElementById('p-nm').value, ag: document.getElementById('p-ag').value, wd: document.getElementById('p-wd').value, al: document.getElementById('p-al').value }, orders: O, saved: sv }; const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'ipd_orders.json'; a.click() }
+        function impD() { const i = document.createElement('input'); i.type = 'file'; i.accept = '.json'; i.onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { try { const d = JSON.parse(ev.target.result); if (d.pt) Object.entries(d.pt).forEach(([k, v]) => { const el = document.getElementById('p-' + k); if (el) el.value = v || '' }); if (d.orders) { O = d.orders; rA() } if (d.saved) { sv = d.saved; localStorage.setItem('ipd3s', JSON.stringify(sv)); rSL() } alert('Import สำเร็จ!') } catch (er) { alert('ไฟล์ไม่ถูกต้อง') } }; r.readAsText(f) }; i.click() }
+
+        // ============ PRINT ============
+        function gCk(ck) { const r = []; O[ck].forEach(s => { const c = s.items.filter(i => i.c); if (c.length || s.notes) r.push({ title: s.t, items: c, notes: s.notes || '', color: s.color }) }); return r }
+        function bPP(sg) {
+            const ax = +document.getElementById('ax').value, ay = +document.getElementById('ay').value, aw = +document.getElementById('aw').value;
+            const ddx = +document.getElementById('dx').value, ddw = +document.getElementById('dw').value;
+            const oox = +document.getElementById('ox').value, oow = +document.getElementById('ow').value;
+            const ccx = +document.getElementById('cx').value, ccw = +document.getElementById('cw').value;
+            const tty = +document.getElementById('ty').value, ffs = +document.getElementById('fs').value;
+            const now = new Date();
+            const ds = now.getDate() + '/' + (now.getMonth() + 1) + '/' + (now.getFullYear() + 543);
+            const ts = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const li = gCk('left'), mi = gCk('mid'), ri = gCk('right');
+            const nm = document.getElementById('p-nm').value || '';
+            const ag = document.getElementById('p-ag').value || '';
+            const hn = document.getElementById('p-hn').value || '';
+            const an = document.getElementById('p-an').value || '';
+            const al = document.getElementById('p-al').value || 'NKDA';
+            function rI(gs) {
+                return gs.map(function (g) {
+                    var h = '<div class="p-ts">' + g.title + '</div>';
+                    h += g.items.map(function (i) {
+                        var line = '<div class="p-ti" style="' + (g.color === 'problem' ? 'font-weight:600' : '') + '">' + (g.color === 'problem' ? '' : '- ') + i.x + '</div>';
+                        if (i.details && i.details.length) {
+                            line += i.details.filter(function (d) { return d.trim() }).map(function (d) { return '<div class="p-ti" style="margin-left:8px;font-size:9px">  → ' + d + '</div>'; }).join('');
+                        }
+                        return line;
+                    }).join('');
+                    if (g.notes && g.notes.trim()) {
+                        h += '<div class="p-ti" style="margin-top:3px;font-size:9px">' + g.notes.replace(/\n/g, '<br>') + '</div>';
+                    }
+                    return h;
+                }).join('');
+            }
+            const gh = sg ? '<div class="go">' + [ax, ax + aw, ddx, ddx + ddw, oox, oox + oow, ccx, ccx + ccw].map(function (v) { return '<div class="gv" style="left:' + v + 'mm"></div>'; }).join('') + '<div class="gh" style="top:' + tty + 'mm"></div></div>' : '';
+            return '<div class="pp">' + gh +
+                '<div class="p-a p-t" style="left:' + ax + 'mm;top:' + tty + 'mm;width:' + aw + 'mm;font-size:' + ffs + 'px">' + rI(li) + '</div>' +
+                '<div class="p-a p-t" style="left:' + ddx + 'mm;top:' + tty + 'mm;width:' + ddw + 'mm;font-size:' + (ffs - 1) + 'px;text-align:center">' + ds + '<br>' + ts + '</div>' +
+                '<div class="p-a p-t" style="left:' + oox + 'mm;top:' + tty + 'mm;width:' + oow + 'mm;font-size:' + ffs + 'px">' + rI(mi) + '</div>' +
+                '<div class="p-a p-t" style="left:' + ccx + 'mm;top:' + tty + 'mm;width:' + ccw + 'mm;font-size:' + ffs + 'px">' + rI(ri) + '</div>' +
+                '<div class="p-a" style="left:' + ax + 'mm;top:280mm;font-size:' + (ffs - 1) + 'px;width:180mm"><span>' + (al !== 'NKDA' ? '● แพ้ยา: ' + al : '○ ไม่แพ้ยา') + '</span></div>' +
+                '<div class="p-a" style="left:12mm;bottom:5mm;font-size:' + (ffs - 1) + 'px;width:190mm"><span>' + nm + '&nbsp;&nbsp;&nbsp;อายุ ' + ag + ' ปี&nbsp;&nbsp;&nbsp;HN: ' + hn + '&nbsp;&nbsp;&nbsp;AN: ' + an + '</span></div>' +
+                '</div>';
+        }
+        function showPv() { document.getElementById('pb').innerHTML = bPP(document.getElementById('gd').checked); document.getElementById('ov').classList.add('sh') }
+        function rPv() { document.getElementById('pb').innerHTML = bPP(document.getElementById('gd').checked) }
+        function clPv() { document.getElementById('ov').classList.remove('sh') }
+        function testP() { const p = `<div class="pp" style="background:transparent"><div class="tx" style="left:10mm;top:10mm"></div><div class="tx" style="left:100mm;top:10mm"></div><div class="tx" style="left:190mm;top:10mm"></div><div class="tx" style="left:10mm;top:30mm"></div><div class="tx" style="left:55mm;top:30mm"></div><div class="tx" style="left:70mm;top:30mm"></div><div class="tx" style="left:140mm;top:30mm"></div><div style="position:absolute;left:10mm;top:45mm;font-size:9px;color:red;font-family:Sarabun">↑ วางกระดาษ order ทับแล้วดูว่ากากบาทตรงกับเส้นคอลัมน์มั้ย</div></div>`; const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap');*{margin:0;padding:0;box-sizing:border-box}.pp{width:210mm;height:297mm;position:relative;font-family:Sarabun}.tx{position:absolute;width:20px;height:20px}.tx::before{content:'';position:absolute;left:9px;top:0;width:1px;height:20px;background:red}.tx::after{content:'';position:absolute;top:9px;left:0;width:20px;height:1px;background:red}@media print{@page{margin:0;size:A4}}</style></head><body>${p}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
+        function doP() { const h = bPP(false); const w = window.open('', '_blank'); w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Sarabun',sans-serif}.pp{width:210mm;height:297mm;position:relative;overflow:hidden}.p-a{position:absolute}.p-t{line-height:1.3;color:#000}.p-ti{padding:.5px 0;font-size:10px}.p-ts{font-weight:600;margin-top:3px;font-size:9px;text-decoration:underline}@media print{@page{margin:0;size:A4}body{background:transparent}.pp{background:transparent}}</style></head><body>${h}</body></html>`); w.document.close(); setTimeout(() => w.print(), 500) }
+        document.getElementById('ov').addEventListener('click', function (e) { if (e.target === this) clPv() });
+        init();
+    </script>
+</body>
+
+</html>
